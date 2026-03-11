@@ -25,3 +25,18 @@ jobs:
 
     - name: Push Docker image
       run: docker push ravali26/mobilenet-api
+
+     - name: Deploy to EC2
+      uses: appleboy/ssh-action@v1.0.0
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ${{ secrets.EC2_USER }}
+        key: ${{ secrets.EC2_KEY }}
+        script: |
+          docker stop mobilenet-api
+          docker rm mobilenet-api
+	  docker container prune -f
+          docker image prune -a -f
+          docker builder prune -a -f
+	  docker pull ravali26/mobilenet-api
+          docker run -d -p 8000:8000 --name mobilenet-api ravali26/mobilenet-api

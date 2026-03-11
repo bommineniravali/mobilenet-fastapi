@@ -15,7 +15,7 @@ input_name = session.get_inputs()[0].name
 
 @app.get("/")
 def home():
-    return {"message": "Object Detection API Running"}
+    return {"message": "Object Detection API is Running"}
 
 @app.post("/predict")
 async def predict(file: UploadFile = File(...)):
